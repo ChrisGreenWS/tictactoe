@@ -1,0 +1,26 @@
+/* Placeholder CSS for Tic Tac Toe */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background: #f8f8f8;
+}
+
+#game-container {
+    max-width: 400px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 24px;
+}
+
+#display-area h1 {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+#board-placeholder {
+    text-align: center;
+    color: #888;
+}
