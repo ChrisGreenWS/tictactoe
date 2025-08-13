@@ -65,6 +65,39 @@ function renderScores() {
         <strong>Score</strong><br>
         Player 1: ${scores.player1} &nbsp;|&nbsp; Player 2: ${scores.player2} &nbsp;|&nbsp; Draws: ${scores.draws}
     `;
+
+    // Button container (always present, but only show buttons if game is over)
+    let btnContainer = document.getElementById('game-btns');
+    if (!btnContainer) {
+        btnContainer = document.createElement('div');
+        btnContainer.id = 'game-btns';
+        btnContainer.style.display = 'flex';
+        btnContainer.style.justifyContent = 'center';
+        btnContainer.style.gap = '16px';
+        btnContainer.style.margin = '16px 0';
+        scoreDiv.insertAdjacentElement('afterend', btnContainer);
+    }
+    if (gameOver) {
+        btnContainer.innerHTML = '';
+        // Reset button
+        let resetBtn = document.createElement('button');
+        resetBtn.id = 'reset-btn';
+        resetBtn.textContent = 'New Game';
+        resetBtn.style.padding = '8px 24px';
+        resetBtn.style.fontSize = '1rem';
+        resetBtn.onclick = resetGame;
+        btnContainer.appendChild(resetBtn);
+        // New Tournament button
+        let tournamentBtn = document.createElement('button');
+        tournamentBtn.id = 'tournament-btn';
+        tournamentBtn.textContent = 'New Tournament';
+        tournamentBtn.style.padding = '8px 24px';
+        tournamentBtn.style.fontSize = '1rem';
+        tournamentBtn.onclick = newTournament;
+        btnContainer.appendChild(tournamentBtn);
+    } else {
+        btnContainer.innerHTML = '';
+    }
 }
 
 function checkWinner() {
@@ -156,41 +189,6 @@ function showMessage(msg) {
         document.getElementById('display-area').insertBefore(msgDiv, document.getElementById('game-board'));
     }
     msgDiv.textContent = msg;
-
-    // Button container (only for game over)
-    let btnContainer = document.getElementById('game-btns');
-    if (gameOver) {
-        if (!btnContainer) {
-            btnContainer = document.createElement('div');
-            btnContainer.id = 'game-btns';
-            btnContainer.style.display = 'flex';
-            btnContainer.style.justifyContent = 'center';
-            btnContainer.style.gap = '16px';
-            btnContainer.style.margin = '16px 0';
-            msgDiv.insertAdjacentElement('afterend', btnContainer);
-        }
-        btnContainer.innerHTML = '';
-
-        // Reset button
-        let resetBtn = document.createElement('button');
-        resetBtn.id = 'reset-btn';
-        resetBtn.textContent = 'New Game';
-        resetBtn.style.padding = '8px 24px';
-        resetBtn.style.fontSize = '1rem';
-        resetBtn.onclick = resetGame;
-        btnContainer.appendChild(resetBtn);
-
-        // New Tournament button
-        let tournamentBtn = document.createElement('button');
-        tournamentBtn.id = 'tournament-btn';
-        tournamentBtn.textContent = 'New Tournament';
-        tournamentBtn.style.padding = '8px 24px';
-        tournamentBtn.style.fontSize = '1rem';
-        tournamentBtn.onclick = newTournament;
-        btnContainer.appendChild(tournamentBtn);
-    } else if (btnContainer) {
-        btnContainer.remove();
-    }
 }
 
 function newTournament() {
@@ -200,11 +198,9 @@ function newTournament() {
     scores = { player1: 0, player2: 0, draws: 0 };
     playerSelections[0] = null;
     playerSelections[1] = null;
-    // Remove message and buttons
+    // Remove message
     const msgDiv = document.getElementById('game-message');
     if (msgDiv) msgDiv.remove();
-    const btnContainer = document.getElementById('game-btns');
-    if (btnContainer) btnContainer.remove();
     renderImageSelection();
     renderBoard();
 }
@@ -215,11 +211,9 @@ function resetGame() {
     boardState = Array(9).fill(null);
     currentPlayer = 0;
     gameOver = false;
-    // Remove message and buttons
+    // Remove message
     const msgDiv = document.getElementById('game-message');
     if (msgDiv) msgDiv.remove();
-    const btnContainer = document.getElementById('game-btns');
-    if (btnContainer) btnContainer.remove();
     renderBoard();
 }
 
