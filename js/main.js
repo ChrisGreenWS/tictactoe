@@ -90,11 +90,16 @@ function isDraw() {
 }
 
 
+
 function renderBoard() {
     renderScores();
     const board = document.getElementById('game-board');
     if (!board) return;
     board.innerHTML = '';
+    // Show current turn if game is not over
+    if (!gameOver && playerSelections[0] && playerSelections[1]) {
+        showMessage(`Player ${currentPlayer + 1}'s turn`);
+    }
     for (let i = 0; i < 9; i++) {
         const cell = document.createElement('div');
         cell.className = 'cell';
@@ -138,6 +143,7 @@ function renderBoard() {
 }
 
 
+
 function showMessage(msg) {
     let msgDiv = document.getElementById('game-message');
     if (!msgDiv) {
@@ -151,36 +157,40 @@ function showMessage(msg) {
     }
     msgDiv.textContent = msg;
 
-    // Button container
+    // Button container (only for game over)
     let btnContainer = document.getElementById('game-btns');
-    if (!btnContainer) {
-        btnContainer = document.createElement('div');
-        btnContainer.id = 'game-btns';
-        btnContainer.style.display = 'flex';
-        btnContainer.style.justifyContent = 'center';
-        btnContainer.style.gap = '16px';
-        btnContainer.style.margin = '16px 0';
-        msgDiv.insertAdjacentElement('afterend', btnContainer);
+    if (gameOver) {
+        if (!btnContainer) {
+            btnContainer = document.createElement('div');
+            btnContainer.id = 'game-btns';
+            btnContainer.style.display = 'flex';
+            btnContainer.style.justifyContent = 'center';
+            btnContainer.style.gap = '16px';
+            btnContainer.style.margin = '16px 0';
+            msgDiv.insertAdjacentElement('afterend', btnContainer);
+        }
+        btnContainer.innerHTML = '';
+
+        // Reset button
+        let resetBtn = document.createElement('button');
+        resetBtn.id = 'reset-btn';
+        resetBtn.textContent = 'New Game';
+        resetBtn.style.padding = '8px 24px';
+        resetBtn.style.fontSize = '1rem';
+        resetBtn.onclick = resetGame;
+        btnContainer.appendChild(resetBtn);
+
+        // New Tournament button
+        let tournamentBtn = document.createElement('button');
+        tournamentBtn.id = 'tournament-btn';
+        tournamentBtn.textContent = 'New Tournament';
+        tournamentBtn.style.padding = '8px 24px';
+        tournamentBtn.style.fontSize = '1rem';
+        tournamentBtn.onclick = newTournament;
+        btnContainer.appendChild(tournamentBtn);
+    } else if (btnContainer) {
+        btnContainer.remove();
     }
-    btnContainer.innerHTML = '';
-
-    // Reset button
-    let resetBtn = document.createElement('button');
-    resetBtn.id = 'reset-btn';
-    resetBtn.textContent = 'New Game';
-    resetBtn.style.padding = '8px 24px';
-    resetBtn.style.fontSize = '1rem';
-    resetBtn.onclick = resetGame;
-    btnContainer.appendChild(resetBtn);
-
-    // New Tournament button
-    let tournamentBtn = document.createElement('button');
-    tournamentBtn.id = 'tournament-btn';
-    tournamentBtn.textContent = 'New Tournament';
-    tournamentBtn.style.padding = '8px 24px';
-    tournamentBtn.style.fontSize = '1rem';
-    tournamentBtn.onclick = newTournament;
-    btnContainer.appendChild(tournamentBtn);
 }
 
 function newTournament() {
