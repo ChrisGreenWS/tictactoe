@@ -138,6 +138,39 @@ h1 {
     text-shadow: 0 1px 4px rgba(99,102,241,0.08);
 }
 
+/* Small thumbnail beside turn message */
+#game-message .turn-thumb {
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(99,102,241,0.12);
+    margin-right: 10px;
+    animation: turn-thumb-pop 0.22s cubic-bezier(0.4, 1.2, 0.6, 1) both;
+    will-change: transform, opacity;
+}
+
+@keyframes turn-thumb-pop {
+    0% {
+        transform: scale(0.82);
+        opacity: 0.4;
+    }
+    70% {
+        transform: scale(1.06);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    #game-message .turn-thumb {
+        animation: none;
+    }
+}
+
 .winner-animate {
     animation: winner-pop 0.5s cubic-bezier(0.4, 1.4, 0.6, 1) both;
 }

@@ -17,16 +17,16 @@
 
 ### User Interface Requirements
 
-- [ ] Simple, clean, and modern design using standard CSS
-- [ ] Responsive layout for desktop and mobile devices
-- [ ] Visual feedback for selected cells and current player
-- [ ] Modal or section for image selection before the game starts
-- [ ] Display player names or labels (e.g., "Player 1", "Player 2")
+- [X] Simple, clean, and modern design using standard CSS
+- [X] Responsive layout for desktop and mobile devices
+- [X] Visual feedback for selected cells and current player
+- [X] Modal or section for image selection before the game starts
+- [X] Display player names or labels (e.g., "Player 1", "Player 2")
 
 ### Technical Requirements
 
-- [ ] Use only HTML, Vanilla JavaScript, and standard CSS (no external libraries)
-- [ ] All assets (images, CSS, JS) are loaded locally
+- [X] Use only HTML, Vanilla JavaScript, and standard CSS (no external libraries)
+- [X] All assets (images, CSS, JS) are loaded locally
 - [ ] Code is organized and commented for readability
 - [ ] Works in all modern browsers
 

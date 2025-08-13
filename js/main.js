@@ -37,6 +37,10 @@ function renderImageSelection() {
                     if (msgDiv && msgDiv.textContent === 'Please select an image before playing') {
                         msgDiv.textContent = '';
                     }
+                    // Immediately show whose turn it is with their marker
+                    if (!gameOver) {
+                        showTurnMessage(currentPlayer);
+                    }
                 }
             };
             optionsDiv.appendChild(imgElem);
@@ -50,6 +54,10 @@ function renderImageSelection() {
         if (msgDiv && msgDiv.textContent === 'Please select an image before playing') {
             msgDiv.textContent = '';
         }
+        // Ensure the turn indicator is visible before the first move
+        if (!gameOver) {
+            showTurnMessage(currentPlayer);
+        }
     }
 }
 
@@ -59,6 +67,10 @@ function renderImageSelection() {
 let boardState = Array(9).fill(null); // null, 0, or 1 (player index)
 let currentPlayer = 0;
 let gameOver = false;
+
+// Track starting order across games
+let nextStartingPlayer = 0;     // who should start the next game
+let roundStartingPlayer = 0;    // who started the current game
 
 // Score tracking
 let scores = {
@@ -146,7 +158,7 @@ function renderBoard() {
     board.innerHTML = '';
     // Show current turn if game is not over
     if (!gameOver && playerSelections[0] && playerSelections[1]) {
-        showMessage(`Player ${currentPlayer + 1}'s turn`);
+        showTurnMessage(currentPlayer);
     }
     for (let i = 0; i < 9; i++) {
         const cell = document.createElement('div');
@@ -183,6 +195,8 @@ function renderBoard() {
                 // Update score
                 if (winner === 0) scores.player1++;
                 else scores.player2++;
+                // Loser starts the next game
+                nextStartingPlayer = 1 - winner;
                 renderBoard();
                 showMessage(`Player ${winner + 1} wins!`, 'green', true);
                 return;
@@ -190,6 +204,8 @@ function renderBoard() {
             if (isDraw()) {
                 gameOver = true;
                 scores.draws++;
+                // Draw: same starter goes first again
+                nextStartingPlayer = roundStartingPlayer;
                 renderBoard();
                 showMessage("It's a draw!", 'orange', true);
                 return;
@@ -234,6 +250,39 @@ function showMessage(msg, color, animate) {
     }
 }
 
+// Show a turn message with the current player's marker thumbnail
+function showTurnMessage(playerIdx) {
+    const marker = playerSelections[playerIdx];
+    // Fallback to plain text if no marker yet
+    if (!marker) {
+        showMessage(`Player ${playerIdx + 1}'s turn`);
+        return;
+    }
+    let msgDiv = document.getElementById('game-message');
+    if (!msgDiv) {
+        msgDiv = document.createElement('div');
+        msgDiv.id = 'game-message';
+        msgDiv.style.textAlign = 'center';
+        msgDiv.style.fontWeight = 'bold';
+        msgDiv.style.margin = '16px 0';
+        msgDiv.style.fontSize = '1.2rem';
+        document.getElementById('display-area').insertBefore(msgDiv, document.getElementById('game-board'));
+    }
+    // Reset any winner animation/color
+    msgDiv.classList.remove('winner-animate');
+    msgDiv.style.color = '';
+    // Compose thumbnail + text
+    msgDiv.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = marker;
+    img.alt = `Player ${playerIdx + 1} marker`;
+    img.className = 'turn-thumb';
+    const span = document.createElement('span');
+    span.textContent = `Player ${playerIdx + 1}'s turn`;
+    msgDiv.appendChild(img);
+    msgDiv.appendChild(span);
+}
+
 function newTournament() {
     boardState = Array(9).fill(null);
     currentPlayer = 0;
@@ -241,6 +290,9 @@ function newTournament() {
     scores = { player1: 0, player2: 0, draws: 0 };
     playerSelections[0] = null;
     playerSelections[1] = null;
+    // Reset starting order for a new tournament
+    nextStartingPlayer = 0;
+    roundStartingPlayer = nextStartingPlayer;
     // Remove message
     let msgDiv = document.getElementById('game-message');
     if (msgDiv) msgDiv.remove();
@@ -260,7 +312,9 @@ function newTournament() {
 
 function resetGame() {
     boardState = Array(9).fill(null);
-    currentPlayer = 0;
+    // Use the computed next starting player from the previous game
+    currentPlayer = nextStartingPlayer;
+    roundStartingPlayer = currentPlayer;
     gameOver = false;
     // Remove message
     let msgDiv = document.getElementById('game-message');
@@ -289,5 +343,8 @@ document.addEventListener('DOMContentLoaded', () => {
         msgDiv.style.fontSize = '1.2rem';
         document.getElementById('display-area').insertBefore(msgDiv, document.getElementById('game-board'));
     }
+    // Initialize starting order on first load
+    currentPlayer = nextStartingPlayer;   // defaults to 0
+    roundStartingPlayer = currentPlayer;
     renderBoard();
 });
