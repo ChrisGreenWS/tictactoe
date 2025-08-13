@@ -1,3 +1,21 @@
+.marker-animate {
+    animation: pop-in 0.25s cubic-bezier(0.4, 1.4, 0.6, 1) both;
+}
+
+@keyframes pop-in {
+    0% {
+        transform: scale(0.2);
+        opacity: 0.2;
+    }
+    70% {
+        transform: scale(1.15);
+        opacity: 1;
+    }
+    100% {
+        transform: scale(1);
+        opacity: 1;
+    }
+}
 /* Reserve space for the game message area to prevent board jump */
 #game-message {
     min-height: 1.6em;

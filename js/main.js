@@ -157,6 +157,10 @@ function renderBoard() {
             const imgElem = document.createElement('img');
             imgElem.src = playerSelections[boardState[i]];
             imgElem.alt = `Player ${boardState[i] + 1} marker`;
+            // Animate only the most recent move
+            if (window.lastMoveIndex === i) {
+                imgElem.classList.add('marker-animate');
+            }
             cell.appendChild(imgElem);
             cell.classList.add('filled');
         }
@@ -172,6 +176,7 @@ function renderBoard() {
                 return;
             }
             boardState[i] = currentPlayer;
+            window.lastMoveIndex = i;
             const winner = checkWinner();
             if (winner !== null) {
                 gameOver = true;
