@@ -5,10 +5,10 @@
 - [ ] Create a responsive HTML page for the game
 - [ ] Display a 3x3 Tic Tac Toe grid
 - [ ] Allow two human players to play on the same device
-- [ ] Provide a selection of images for each player to choose as their marker (X or O)
-	- [ ] Player 1 selects an image for their marker
-	- [ ] Player 2 selects a different image for their marker
-	- [ ] Prevent both players from selecting the same image
+- [X] Provide a selection of images for each player to choose as their marker (X or O)
+	- [X] Player 1 selects an image for their marker
+	- [X] Player 2 selects a different image for their marker
+	- [X] Prevent both players from selecting the same image
 - [ ] Display the selected images on the game board as moves are made
 - [ ] Indicate which player's turn it is
 - [ ] Detect and display when a player wins or when the game is a draw

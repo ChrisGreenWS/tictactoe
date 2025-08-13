@@ -38,6 +38,23 @@ function renderImageSelection() {
     });
 }
 
+function renderBoard() {
+    const board = document.getElementById('game-board');
+    if (!board) return;
+    board.innerHTML = '';
+    for (let i = 0; i < 9; i++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        cell.dataset.index = i;
+        cell.onclick = () => {
+            // Game logic for placing marker will go here
+            console.log('Cell clicked:', i);
+        };
+        board.appendChild(cell);
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     renderImageSelection();
+    renderBoard();
 });
