@@ -1,3 +1,10 @@
+/* Reserve space for the game message area to prevent board jump */
+#game-message {
+    min-height: 1.6em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 /* Main stylesheet for Tic Tac Toe */
 body {
     font-family: Arial, sans-serif;

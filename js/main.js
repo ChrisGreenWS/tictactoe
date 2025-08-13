@@ -199,8 +199,16 @@ function newTournament() {
     playerSelections[0] = null;
     playerSelections[1] = null;
     // Remove message
-    const msgDiv = document.getElementById('game-message');
+    let msgDiv = document.getElementById('game-message');
     if (msgDiv) msgDiv.remove();
+    // Always recreate the message area to preserve space
+    msgDiv = document.createElement('div');
+    msgDiv.id = 'game-message';
+    msgDiv.style.textAlign = 'center';
+    msgDiv.style.fontWeight = 'bold';
+    msgDiv.style.margin = '16px 0';
+    msgDiv.style.fontSize = '1.2rem';
+    document.getElementById('display-area').insertBefore(msgDiv, document.getElementById('game-board'));
     renderImageSelection();
     renderBoard();
 }
@@ -212,12 +220,31 @@ function resetGame() {
     currentPlayer = 0;
     gameOver = false;
     // Remove message
-    const msgDiv = document.getElementById('game-message');
+    let msgDiv = document.getElementById('game-message');
     if (msgDiv) msgDiv.remove();
+    // Always recreate the message area to preserve space
+    msgDiv = document.createElement('div');
+    msgDiv.id = 'game-message';
+    msgDiv.style.textAlign = 'center';
+    msgDiv.style.fontWeight = 'bold';
+    msgDiv.style.margin = '16px 0';
+    msgDiv.style.fontSize = '1.2rem';
+    document.getElementById('display-area').insertBefore(msgDiv, document.getElementById('game-board'));
     renderBoard();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     renderImageSelection();
-        renderBoard();
-    });
+    // Always create the message area to reserve space
+    let msgDiv = document.getElementById('game-message');
+    if (!msgDiv) {
+        msgDiv = document.createElement('div');
+        msgDiv.id = 'game-message';
+        msgDiv.style.textAlign = 'center';
+        msgDiv.style.fontWeight = 'bold';
+        msgDiv.style.margin = '16px 0';
+        msgDiv.style.fontSize = '1.2rem';
+        document.getElementById('display-area').insertBefore(msgDiv, document.getElementById('game-board'));
+    }
+    renderBoard();
+});
