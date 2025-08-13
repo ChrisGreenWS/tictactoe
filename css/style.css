@@ -89,4 +89,5 @@ h1 {
     height: 64px;
     object-fit: cover;
     pointer-events: none;
+    border-radius: 8px;
 }

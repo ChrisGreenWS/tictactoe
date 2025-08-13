@@ -38,6 +38,10 @@ function renderImageSelection() {
     });
 }
 
+
+let boardState = Array(9).fill(null); // null, 0, or 1 (player index)
+let currentPlayer = 0;
+
 function renderBoard() {
     const board = document.getElementById('game-board');
     if (!board) return;
@@ -46,9 +50,21 @@ function renderBoard() {
         const cell = document.createElement('div');
         cell.className = 'cell';
         cell.dataset.index = i;
+        if (boardState[i] !== null) {
+            // Place marker image
+            const imgElem = document.createElement('img');
+            imgElem.src = playerSelections[boardState[i]];
+            imgElem.alt = `Player ${boardState[i] + 1} marker`;
+            cell.appendChild(imgElem);
+            cell.classList.add('filled');
+        }
         cell.onclick = () => {
-            // Game logic for placing marker will go here
-            console.log('Cell clicked:', i);
+            // Only allow move if cell is empty and both players have selected images
+            if (boardState[i] !== null) return;
+            if (!playerSelections[0] || !playerSelections[1]) return;
+            boardState[i] = currentPlayer;
+            currentPlayer = 1 - currentPlayer;
+            renderBoard();
         };
         board.appendChild(cell);
     }
