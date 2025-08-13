@@ -33,6 +33,6 @@
 ### Stretch Goals (Optional)
 
 - [ ] Allow players to enter custom names
-- [ ] Add simple animations for moves or win/draw announcement
+- [X] Add simple animations for moves or win/draw announcement
 - [X] Track and display score across multiple rounds
 - [ ] Allow players to upload their own images as markersS
