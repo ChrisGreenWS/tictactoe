@@ -39,8 +39,33 @@ function renderImageSelection() {
 }
 
 
+
 let boardState = Array(9).fill(null); // null, 0, or 1 (player index)
 let currentPlayer = 0;
+let gameOver = false;
+
+function checkWinner() {
+    const winPatterns = [
+        [0,1,2], [3,4,5], [6,7,8], // rows
+        [0,3,6], [1,4,7], [2,5,8], // cols
+        [0,4,8], [2,4,6]           // diags
+    ];
+    for (const [a,b,c] of winPatterns) {
+        if (
+            boardState[a] !== null &&
+            boardState[a] === boardState[b] &&
+            boardState[a] === boardState[c]
+        ) {
+            return boardState[a]; // 0 or 1
+        }
+    }
+    return null;
+}
+
+function isDraw() {
+    return boardState.every(cell => cell !== null);
+}
+
 
 function renderBoard() {
     const board = document.getElementById('game-board');
@@ -59,15 +84,43 @@ function renderBoard() {
             cell.classList.add('filled');
         }
         cell.onclick = () => {
+            if (gameOver) return;
             // Only allow move if cell is empty and both players have selected images
             if (boardState[i] !== null) return;
             if (!playerSelections[0] || !playerSelections[1]) return;
             boardState[i] = currentPlayer;
+            const winner = checkWinner();
+            if (winner !== null) {
+                gameOver = true;
+                renderBoard();
+                showMessage(`Player ${winner + 1} wins!`);
+                return;
+            }
+            if (isDraw()) {
+                gameOver = true;
+                renderBoard();
+                showMessage("It's a draw!");
+                return;
+            }
             currentPlayer = 1 - currentPlayer;
             renderBoard();
         };
         board.appendChild(cell);
     }
+}
+
+function showMessage(msg) {
+    let msgDiv = document.getElementById('game-message');
+    if (!msgDiv) {
+        msgDiv = document.createElement('div');
+        msgDiv.id = 'game-message';
+        msgDiv.style.textAlign = 'center';
+        msgDiv.style.fontWeight = 'bold';
+        msgDiv.style.margin = '16px 0';
+        msgDiv.style.fontSize = '1.2rem';
+        document.getElementById('display-area').insertBefore(msgDiv, document.getElementById('game-board'));
+    }
+    msgDiv.textContent = msg;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
