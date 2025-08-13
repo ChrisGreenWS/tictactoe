@@ -121,6 +121,32 @@ function showMessage(msg) {
         document.getElementById('display-area').insertBefore(msgDiv, document.getElementById('game-board'));
     }
     msgDiv.textContent = msg;
+
+    // Add Reset button if not present
+    let resetBtn = document.getElementById('reset-btn');
+    if (!resetBtn) {
+        resetBtn = document.createElement('button');
+        resetBtn.id = 'reset-btn';
+        resetBtn.textContent = 'Reset Game';
+        resetBtn.style.display = 'block';
+        resetBtn.style.margin = '16px auto';
+        resetBtn.style.padding = '8px 24px';
+        resetBtn.style.fontSize = '1rem';
+        resetBtn.onclick = resetGame;
+        msgDiv.insertAdjacentElement('afterend', resetBtn);
+    }
+}
+
+function resetGame() {
+    boardState = Array(9).fill(null);
+    currentPlayer = 0;
+    gameOver = false;
+    // Remove message and reset button
+    const msgDiv = document.getElementById('game-message');
+    if (msgDiv) msgDiv.remove();
+    const resetBtn = document.getElementById('reset-btn');
+    if (resetBtn) resetBtn.remove();
+    renderBoard();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
