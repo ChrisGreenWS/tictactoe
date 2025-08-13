@@ -184,14 +184,14 @@ function renderBoard() {
                 if (winner === 0) scores.player1++;
                 else scores.player2++;
                 renderBoard();
-                showMessage(`Player ${winner + 1} wins!`, 'green');
+                showMessage(`Player ${winner + 1} wins!`, 'green', true);
                 return;
             }
             if (isDraw()) {
                 gameOver = true;
                 scores.draws++;
                 renderBoard();
-                showMessage("It's a draw!", 'orange');
+                showMessage("It's a draw!", 'orange', true);
                 return;
             }
             currentPlayer = 1 - currentPlayer;
@@ -203,7 +203,7 @@ function renderBoard() {
 
 
 
-function showMessage(msg, color) {
+function showMessage(msg, color, animate) {
     let msgDiv = document.getElementById('game-message');
     if (!msgDiv) {
         msgDiv = document.createElement('div');
@@ -222,6 +222,15 @@ function showMessage(msg, color) {
         msgDiv.style.color = 'red';
     } else {
         msgDiv.style.color = '';
+    }
+    // Animate winner/draw message
+    if (animate) {
+        msgDiv.classList.remove('winner-animate');
+        // Force reflow to restart animation if needed
+        void msgDiv.offsetWidth;
+        msgDiv.classList.add('winner-animate');
+    } else {
+        msgDiv.classList.remove('winner-animate');
     }
 }
 
