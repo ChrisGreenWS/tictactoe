@@ -138,6 +138,16 @@ h1 {
     text-shadow: 0 1px 4px rgba(99,102,241,0.08);
 }
 
+/* Small thumbnail beside turn message */
+#game-message .turn-thumb {
+    width: 28px;
+    height: 28px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 1px 4px rgba(99,102,241,0.12);
+    margin-right: 10px;
+}
+
 .winner-animate {
     animation: winner-pop 0.5s cubic-bezier(0.4, 1.4, 0.6, 1) both;
 }

@@ -150,7 +150,7 @@ function renderBoard() {
     board.innerHTML = '';
     // Show current turn if game is not over
     if (!gameOver && playerSelections[0] && playerSelections[1]) {
-        showMessage(`Player ${currentPlayer + 1}'s turn`);
+        showTurnMessage(currentPlayer);
     }
     for (let i = 0; i < 9; i++) {
         const cell = document.createElement('div');
@@ -240,6 +240,39 @@ function showMessage(msg, color, animate) {
     } else {
         msgDiv.classList.remove('winner-animate');
     }
+}
+
+// Show a turn message with the current player's marker thumbnail
+function showTurnMessage(playerIdx) {
+    const marker = playerSelections[playerIdx];
+    // Fallback to plain text if no marker yet
+    if (!marker) {
+        showMessage(`Player ${playerIdx + 1}'s turn`);
+        return;
+    }
+    let msgDiv = document.getElementById('game-message');
+    if (!msgDiv) {
+        msgDiv = document.createElement('div');
+        msgDiv.id = 'game-message';
+        msgDiv.style.textAlign = 'center';
+        msgDiv.style.fontWeight = 'bold';
+        msgDiv.style.margin = '16px 0';
+        msgDiv.style.fontSize = '1.2rem';
+        document.getElementById('display-area').insertBefore(msgDiv, document.getElementById('game-board'));
+    }
+    // Reset any winner animation/color
+    msgDiv.classList.remove('winner-animate');
+    msgDiv.style.color = '';
+    // Compose thumbnail + text
+    msgDiv.innerHTML = '';
+    const img = document.createElement('img');
+    img.src = marker;
+    img.alt = `Player ${playerIdx + 1} marker`;
+    img.className = 'turn-thumb';
+    const span = document.createElement('span');
+    span.textContent = `Player ${playerIdx + 1}'s turn`;
+    msgDiv.appendChild(img);
+    msgDiv.appendChild(span);
 }
 
 function newTournament() {
