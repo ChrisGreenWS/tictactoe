@@ -60,6 +60,10 @@ let boardState = Array(9).fill(null); // null, 0, or 1 (player index)
 let currentPlayer = 0;
 let gameOver = false;
 
+// Track starting order across games
+let nextStartingPlayer = 0;     // who should start the next game
+let roundStartingPlayer = 0;    // who started the current game
+
 // Score tracking
 let scores = {
     player1: 0,
@@ -183,6 +187,8 @@ function renderBoard() {
                 // Update score
                 if (winner === 0) scores.player1++;
                 else scores.player2++;
+                // Loser starts the next game
+                nextStartingPlayer = 1 - winner;
                 renderBoard();
                 showMessage(`Player ${winner + 1} wins!`, 'green', true);
                 return;
@@ -190,6 +196,8 @@ function renderBoard() {
             if (isDraw()) {
                 gameOver = true;
                 scores.draws++;
+                // Draw: same starter goes first again
+                nextStartingPlayer = roundStartingPlayer;
                 renderBoard();
                 showMessage("It's a draw!", 'orange', true);
                 return;
@@ -241,6 +249,9 @@ function newTournament() {
     scores = { player1: 0, player2: 0, draws: 0 };
     playerSelections[0] = null;
     playerSelections[1] = null;
+    // Reset starting order for a new tournament
+    nextStartingPlayer = 0;
+    roundStartingPlayer = nextStartingPlayer;
     // Remove message
     let msgDiv = document.getElementById('game-message');
     if (msgDiv) msgDiv.remove();
@@ -260,7 +271,9 @@ function newTournament() {
 
 function resetGame() {
     boardState = Array(9).fill(null);
-    currentPlayer = 0;
+    // Use the computed next starting player from the previous game
+    currentPlayer = nextStartingPlayer;
+    roundStartingPlayer = currentPlayer;
     gameOver = false;
     // Remove message
     let msgDiv = document.getElementById('game-message');
@@ -289,5 +302,8 @@ document.addEventListener('DOMContentLoaded', () => {
         msgDiv.style.fontSize = '1.2rem';
         document.getElementById('display-area').insertBefore(msgDiv, document.getElementById('game-board'));
     }
+    // Initialize starting order on first load
+    currentPlayer = nextStartingPlayer;   // defaults to 0
+    roundStartingPlayer = currentPlayer;
     renderBoard();
 });
