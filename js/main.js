@@ -157,6 +157,10 @@ function renderBoard() {
             const imgElem = document.createElement('img');
             imgElem.src = playerSelections[boardState[i]];
             imgElem.alt = `Player ${boardState[i] + 1} marker`;
+            // Animate only the most recent move
+            if (window.lastMoveIndex === i) {
+                imgElem.classList.add('marker-animate');
+            }
             cell.appendChild(imgElem);
             cell.classList.add('filled');
         }
@@ -172,6 +176,7 @@ function renderBoard() {
                 return;
             }
             boardState[i] = currentPlayer;
+            window.lastMoveIndex = i;
             const winner = checkWinner();
             if (winner !== null) {
                 gameOver = true;
@@ -179,14 +184,14 @@ function renderBoard() {
                 if (winner === 0) scores.player1++;
                 else scores.player2++;
                 renderBoard();
-                showMessage(`Player ${winner + 1} wins!`);
+                showMessage(`Player ${winner + 1} wins!`, 'green', true);
                 return;
             }
             if (isDraw()) {
                 gameOver = true;
                 scores.draws++;
                 renderBoard();
-                showMessage("It's a draw!");
+                showMessage("It's a draw!", 'orange', true);
                 return;
             }
             currentPlayer = 1 - currentPlayer;
@@ -198,7 +203,7 @@ function renderBoard() {
 
 
 
-function showMessage(msg) {
+function showMessage(msg, color, animate) {
     let msgDiv = document.getElementById('game-message');
     if (!msgDiv) {
         msgDiv = document.createElement('div');
@@ -210,10 +215,23 @@ function showMessage(msg) {
         document.getElementById('display-area').insertBefore(msgDiv, document.getElementById('game-board'));
     }
     msgDiv.textContent = msg;
-        // Reset color for non-warning messages
-        if (msg !== 'Please select an image before playing') {
-            msgDiv.style.color = '';
-        }
+    // Set color for special messages
+    if (color) {
+        msgDiv.style.color = color;
+    } else if (msg === 'Please select an image before playing') {
+        msgDiv.style.color = 'red';
+    } else {
+        msgDiv.style.color = '';
+    }
+    // Animate winner/draw message
+    if (animate) {
+        msgDiv.classList.remove('winner-animate');
+        // Force reflow to restart animation if needed
+        void msgDiv.offsetWidth;
+        msgDiv.classList.add('winner-animate');
+    } else {
+        msgDiv.classList.remove('winner-animate');
+    }
 }
 
 function newTournament() {
