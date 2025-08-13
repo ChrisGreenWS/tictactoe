@@ -40,9 +40,32 @@ function renderImageSelection() {
 
 
 
+
 let boardState = Array(9).fill(null); // null, 0, or 1 (player index)
 let currentPlayer = 0;
 let gameOver = false;
+
+// Score tracking
+let scores = {
+    player1: 0,
+    player2: 0,
+    draws: 0
+};
+
+function renderScores() {
+    let scoreDiv = document.getElementById('scoreboard');
+    if (!scoreDiv) {
+        scoreDiv = document.createElement('div');
+        scoreDiv.id = 'scoreboard';
+        scoreDiv.style.textAlign = 'center';
+        scoreDiv.style.margin = '24px 0 0 0';
+        document.getElementById('display-area').appendChild(scoreDiv);
+    }
+    scoreDiv.innerHTML = `
+        <strong>Score</strong><br>
+        Player 1: ${scores.player1} &nbsp;|&nbsp; Player 2: ${scores.player2} &nbsp;|&nbsp; Draws: ${scores.draws}
+    `;
+}
 
 function checkWinner() {
     const winPatterns = [
@@ -68,6 +91,7 @@ function isDraw() {
 
 
 function renderBoard() {
+    renderScores();
     const board = document.getElementById('game-board');
     if (!board) return;
     board.innerHTML = '';
@@ -92,12 +116,16 @@ function renderBoard() {
             const winner = checkWinner();
             if (winner !== null) {
                 gameOver = true;
+                // Update score
+                if (winner === 0) scores.player1++;
+                else scores.player2++;
                 renderBoard();
                 showMessage(`Player ${winner + 1} wins!`);
                 return;
             }
             if (isDraw()) {
                 gameOver = true;
+                scores.draws++;
                 renderBoard();
                 showMessage("It's a draw!");
                 return;
@@ -108,6 +136,7 @@ function renderBoard() {
         board.appendChild(cell);
     }
 }
+
 
 function showMessage(msg) {
     let msgDiv = document.getElementById('game-message');
@@ -122,34 +151,69 @@ function showMessage(msg) {
     }
     msgDiv.textContent = msg;
 
-    // Add Reset button if not present
-    let resetBtn = document.getElementById('reset-btn');
-    if (!resetBtn) {
-        resetBtn = document.createElement('button');
-        resetBtn.id = 'reset-btn';
-        resetBtn.textContent = 'Reset Game';
-        resetBtn.style.display = 'block';
-        resetBtn.style.margin = '16px auto';
-        resetBtn.style.padding = '8px 24px';
-        resetBtn.style.fontSize = '1rem';
-        resetBtn.onclick = resetGame;
-        msgDiv.insertAdjacentElement('afterend', resetBtn);
+    // Button container
+    let btnContainer = document.getElementById('game-btns');
+    if (!btnContainer) {
+        btnContainer = document.createElement('div');
+        btnContainer.id = 'game-btns';
+        btnContainer.style.display = 'flex';
+        btnContainer.style.justifyContent = 'center';
+        btnContainer.style.gap = '16px';
+        btnContainer.style.margin = '16px 0';
+        msgDiv.insertAdjacentElement('afterend', btnContainer);
     }
+    btnContainer.innerHTML = '';
+
+    // Reset button
+    let resetBtn = document.createElement('button');
+    resetBtn.id = 'reset-btn';
+    resetBtn.textContent = 'New Game';
+    resetBtn.style.padding = '8px 24px';
+    resetBtn.style.fontSize = '1rem';
+    resetBtn.onclick = resetGame;
+    btnContainer.appendChild(resetBtn);
+
+    // New Tournament button
+    let tournamentBtn = document.createElement('button');
+    tournamentBtn.id = 'tournament-btn';
+    tournamentBtn.textContent = 'New Tournament';
+    tournamentBtn.style.padding = '8px 24px';
+    tournamentBtn.style.fontSize = '1rem';
+    tournamentBtn.onclick = newTournament;
+    btnContainer.appendChild(tournamentBtn);
 }
+
+function newTournament() {
+    boardState = Array(9).fill(null);
+    currentPlayer = 0;
+    gameOver = false;
+    scores = { player1: 0, player2: 0, draws: 0 };
+    playerSelections[0] = null;
+    playerSelections[1] = null;
+    // Remove message and buttons
+    const msgDiv = document.getElementById('game-message');
+    if (msgDiv) msgDiv.remove();
+    const btnContainer = document.getElementById('game-btns');
+    if (btnContainer) btnContainer.remove();
+    renderImageSelection();
+    renderBoard();
+}
+
+
 
 function resetGame() {
     boardState = Array(9).fill(null);
     currentPlayer = 0;
     gameOver = false;
-    // Remove message and reset button
+    // Remove message and buttons
     const msgDiv = document.getElementById('game-message');
     if (msgDiv) msgDiv.remove();
-    const resetBtn = document.getElementById('reset-btn');
-    if (resetBtn) resetBtn.remove();
+    const btnContainer = document.getElementById('game-btns');
+    if (btnContainer) btnContainer.remove();
     renderBoard();
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     renderImageSelection();
-    renderBoard();
-});
+        renderBoard();
+    });
