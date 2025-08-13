@@ -6,6 +6,7 @@ const imageOptions = [
     'img/Hadley.png'
 ];
 
+
 function renderImageSelection() {
     const container = document.getElementById('image-selection');
     if (!container) return;
@@ -30,12 +31,26 @@ function renderImageSelection() {
                     playerSelections[1 - playerIdx] = null;
                 }
                 renderImageSelection();
+                // If both players have now selected, clear the message if it was the warning
+                if (playerSelections[0] && playerSelections[1]) {
+                    const msgDiv = document.getElementById('game-message');
+                    if (msgDiv && msgDiv.textContent === 'Please select an image before playing') {
+                        msgDiv.textContent = '';
+                    }
+                }
             };
             optionsDiv.appendChild(imgElem);
         });
         playerDiv.appendChild(optionsDiv);
         container.appendChild(playerDiv);
     });
+    // Also check after rendering in case both were already selected
+    if (playerSelections[0] && playerSelections[1]) {
+        const msgDiv = document.getElementById('game-message');
+        if (msgDiv && msgDiv.textContent === 'Please select an image before playing') {
+            msgDiv.textContent = '';
+        }
+    }
 }
 
 
@@ -147,9 +162,15 @@ function renderBoard() {
         }
         cell.onclick = () => {
             if (gameOver) return;
-            // Only allow move if cell is empty and both players have selected images
+            // Only allow move if cell is empty
             if (boardState[i] !== null) return;
-            if (!playerSelections[0] || !playerSelections[1]) return;
+            if (!playerSelections[0] || !playerSelections[1]) {
+                    showMessage("Please select an image before playing");
+                    // Set color to red for this warning
+                    const msgDiv = document.getElementById('game-message');
+                    if (msgDiv) msgDiv.style.color = 'red';
+                return;
+            }
             boardState[i] = currentPlayer;
             const winner = checkWinner();
             if (winner !== null) {
@@ -189,6 +210,10 @@ function showMessage(msg) {
         document.getElementById('display-area').insertBefore(msgDiv, document.getElementById('game-board'));
     }
     msgDiv.textContent = msg;
+        // Reset color for non-warning messages
+        if (msg !== 'Please select an image before playing') {
+            msgDiv.style.color = '';
+        }
 }
 
 function newTournament() {
