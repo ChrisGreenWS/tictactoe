@@ -1,0 +1,32 @@
+# Standard .gitignore for HTML/CSS/JS web projects
+# Node, Python, and build artifacts are not needed for this project
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# VS Code settings
+.vscode/
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.*
+
+# Dependency directories (not used, but common)
+node_modules/
+bower_components/
+
+# Build output (not used, but common)
+dist/
+build/
+
+# Misc
+*.swp
+*.swo
+
+# Images cache or temp
+img/cache/
+img/tmp/
