@@ -84,7 +84,7 @@ h1 {
 .image-option.disabled {
     opacity: 0.32;
     pointer-events: none;
-    filter: grayscale(0.5);
+    filter: grayscale(50%);
 }
 
 .board {
