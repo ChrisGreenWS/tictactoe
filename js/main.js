@@ -37,6 +37,10 @@ function renderImageSelection() {
                     if (msgDiv && msgDiv.textContent === 'Please select an image before playing') {
                         msgDiv.textContent = '';
                     }
+                    // Immediately show whose turn it is with their marker
+                    if (!gameOver) {
+                        showTurnMessage(currentPlayer);
+                    }
                 }
             };
             optionsDiv.appendChild(imgElem);
@@ -49,6 +53,10 @@ function renderImageSelection() {
         const msgDiv = document.getElementById('game-message');
         if (msgDiv && msgDiv.textContent === 'Please select an image before playing') {
             msgDiv.textContent = '';
+        }
+        // Ensure the turn indicator is visible before the first move
+        if (!gameOver) {
+            showTurnMessage(currentPlayer);
         }
     }
 }
