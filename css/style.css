@@ -1,0 +1,58 @@
+/* Main stylesheet for Tic Tac Toe */
+body {
+    font-family: Arial, sans-serif;
+    background: #f8f8f8;
+    margin: 0;
+    padding: 0;
+}
+
+#main-container {
+    max-width: 500px;
+    margin: 40px auto;
+    background: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    padding: 24px;
+}
+
+h1 {
+    text-align: center;
+}
+
+#image-selection {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    margin-bottom: 32px;
+}
+
+.player-select {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.image-options {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+}
+
+.image-option {
+    border: 2px solid transparent;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border 0.2s;
+    width: 64px;
+    height: 64px;
+    object-fit: cover;
+}
+
+.image-option.selected {
+    border: 2px solid #0078d7;
+}
+
+.image-option.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+}
