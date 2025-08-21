@@ -348,6 +348,45 @@ h1 {
     }
 }
 
+/* Responsive styles for mobile devices */
+@media (max-width: 480px) {
+    #main-container {
+        margin: 20px auto;
+        padding: 24px 16px;
+        max-width: 90%;
+    }
+
+    .board {
+        grid-template-columns: repeat(3, 75px);
+        grid-template-rows: repeat(3, 75px);
+        gap: 12px;
+        padding: 20px;
+    }
+
+    .cell {
+        width: 75px;
+        height: 75px;
+    }
+
+    .cell img {
+        width: 55px;
+        height: 55px;
+    }
+
+    .image-option {
+        width: 60px;
+        height: 60px;
+    }
+
+    .image-options {
+        gap: 12px;
+    }
+
+    h1 {
+        font-size: 2.2rem;
+    }
+}
+
 /* Button modern styles */
 #game-btns button {
     background: 
